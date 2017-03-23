@@ -1,5 +1,6 @@
 package org.stenio.docmanager.service;
 
+import org.stenio.docmanager.dto.FileItemDTO;
 import org.stenio.docmanager.model.FileItem;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface FileService {
 
     FileItem save(FileItem fileItem);
 
-    List<FileItem> list(String path, long uid);
+    List<FileItemDTO> list(String path, long uid);
+
+    FileItem getFile(String path, long uid);
 }

@@ -1,15 +1,20 @@
 package org.stenio.docmanager.service;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stenio.docmanager.constants.FileItemType;
+import org.stenio.docmanager.dto.FileItemDTO;
 import org.stenio.docmanager.mapper.FileItemMapper;
 import org.stenio.docmanager.model.FileItem;
 import org.stenio.docmanager.model.FileItemCriteria;
+import org.stenio.docmanager.model.User;
 import org.stenio.docmanager.util.FileUtil;
+import org.stenio.docmanager.util.StringUtil;
 
-import java.util.Date;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
 
 /**
  * Created by bjhexin3 on 2017/3/21.
@@ -19,6 +24,9 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     private FileItemMapper fileItemMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public FileItem createFolder(String path, long uid) {
@@ -53,9 +61,57 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<FileItem> list(String path, long uid) {
+    public List<FileItemDTO> list(String path, long uid) {
         FileItemCriteria query = new FileItemCriteria();
         query.createCriteria().andUidEqualTo(uid).andDirEqualTo(path);
-        return fileItemMapper.selectByExample(query);
+        List<FileItem> fileItems = fileItemMapper.selectByExample(query);
+        List<Long> uids = extractUids(fileItems);
+        List<User> users = userService.list(uids);
+        List<FileItemDTO> result = mapUsers(fileItems, users);
+        return result;
+    }
+
+    @Override
+    public FileItem getFile(String path, long uid) {
+        FileItemCriteria query = new FileItemCriteria();
+        String[] strs = FileUtil.splitDirAndName(path);
+        // todo
+        if (StringUtil.isEmpty(strs[0]) || StringUtil.isEmpty(strs[1])) {
+            return null;
+        }
+        query.createCriteria().andUidEqualTo(uid).andDirEqualTo(strs[0]).andNameEqualTo(strs[1]);
+        List<FileItem> fileItems = fileItemMapper.selectByExample(query);
+        if (fileItems != null && !fileItems.isEmpty()) {
+            return fileItems.get(0);
+        }
+        return null;
+    }
+
+    private List<FileItemDTO> mapUsers(List<FileItem> fileItems, List<User> users) {
+        List<FileItemDTO> result = new ArrayList<>(fileItems.size());
+        Map<Long, User> userMap = new HashMap<>();
+        for (User user : users) {
+            userMap.put(user.getId(), user);
+        }
+        for (FileItem item : fileItems) {
+            User user = userMap.get(item.getUid());
+            FileItemDTO file = new FileItemDTO();
+            try {
+                BeanUtils.copyProperties(file, item);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalStateException("properties copy error");
+            }
+            file.setUserName(user.getRealName());
+            result.add(file);
+        }
+        return result;
+    }
+
+    private List<Long> extractUids(List<FileItem> fileItems) {
+        List<Long> uids = new ArrayList<>(fileItems.size());
+        for (FileItem item : fileItems) {
+            uids.add(item.getUid());
+        }
+        return uids;
     }
 }
