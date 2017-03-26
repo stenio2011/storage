@@ -39,6 +39,8 @@ public class FileController {
     public FileItem upload(String path, @RequestParam("file") MultipartFile file) throws IOException {
         String rootPath = ConfigUtil.getString("file_root");
         String absoluteDir = FileUtil.fixPath(rootPath + "/" + path);
+        String bakRootPath = ConfigUtil.getString("bak_file_root");
+        String bakAbsoluteDir = FileUtil.fixPath(bakRootPath + "/" + path);
         File dir = new File(absoluteDir);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -47,7 +49,11 @@ public class FileController {
             // TODO 返回错误
         }
         String fileName = file.getOriginalFilename();
-        file.transferTo(new File(FileUtil.fixPath(absoluteDir + "/" + fileName)));
+        File toFile = new File(FileUtil.fixPath(absoluteDir + "/" + fileName));
+        file.transferTo(toFile);
+
+        FileUtil.copyFile(toFile, new File(bakAbsoluteDir));
+
         FileItem fileItem = new FileItem();
         fileItem.setSize(file.getSize());
         fileItem.setDir(path);
@@ -87,11 +93,10 @@ public class FileController {
             while ((c = in.read(b)) > 0) {
                 out.write(b, 0, c);
             }
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 
 }

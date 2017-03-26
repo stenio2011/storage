@@ -1,5 +1,7 @@
 package org.stenio.docmanager.util;
 
+import java.io.*;
+
 /**
  * Created by bjhexin3 on 2017/3/21.
  */
@@ -37,5 +39,36 @@ public class FileUtil {
         return path;
     }
 
+    public static void copyFile(File source, File target) {
+        InputStream fis = null;
+        OutputStream fos = null;
+        try {
+            fis = new BufferedInputStream(new FileInputStream(source));
+            fos = new BufferedOutputStream(new FileOutputStream(target));
+            byte[] buf = new byte[4096];
+            int i;
+            while ((i = fis.read(buf)) != -1) {
+                fos.write(buf, 0, i);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(fis != null){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }
