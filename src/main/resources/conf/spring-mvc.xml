@@ -16,4 +16,6 @@
     </context:component-scan>
 
     <mvc:annotation-driven />
+
+    <mvc:resources mapping="/static/**" location="/"></mvc:resources>
 </beans>
