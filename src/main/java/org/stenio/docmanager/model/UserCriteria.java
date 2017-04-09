@@ -474,62 +474,52 @@ public class UserCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerEqualTo(String value) {
+        public Criteria andIsManagerEqualTo(Byte value) {
             addCriterion("is_manager =", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerNotEqualTo(String value) {
+        public Criteria andIsManagerNotEqualTo(Byte value) {
             addCriterion("is_manager <>", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerGreaterThan(String value) {
+        public Criteria andIsManagerGreaterThan(Byte value) {
             addCriterion("is_manager >", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerGreaterThanOrEqualTo(String value) {
+        public Criteria andIsManagerGreaterThanOrEqualTo(Byte value) {
             addCriterion("is_manager >=", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerLessThan(String value) {
+        public Criteria andIsManagerLessThan(Byte value) {
             addCriterion("is_manager <", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerLessThanOrEqualTo(String value) {
+        public Criteria andIsManagerLessThanOrEqualTo(Byte value) {
             addCriterion("is_manager <=", value, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerLike(String value) {
-            addCriterion("is_manager like", value, "isManager");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsManagerNotLike(String value) {
-            addCriterion("is_manager not like", value, "isManager");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsManagerIn(List<String> values) {
+        public Criteria andIsManagerIn(List<Byte> values) {
             addCriterion("is_manager in", values, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerNotIn(List<String> values) {
+        public Criteria andIsManagerNotIn(List<Byte> values) {
             addCriterion("is_manager not in", values, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerBetween(String value1, String value2) {
+        public Criteria andIsManagerBetween(Byte value1, Byte value2) {
             addCriterion("is_manager between", value1, value2, "isManager");
             return (Criteria) this;
         }
 
-        public Criteria andIsManagerNotBetween(String value1, String value2) {
+        public Criteria andIsManagerNotBetween(Byte value1, Byte value2) {
             addCriterion("is_manager not between", value1, value2, "isManager");
             return (Criteria) this;
         }

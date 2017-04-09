@@ -65,6 +65,9 @@ public class FileServiceImpl implements FileService {
         FileItemCriteria query = new FileItemCriteria();
         query.createCriteria().andUidEqualTo(uid).andDirEqualTo(path);
         List<FileItem> fileItems = fileItemMapper.selectByExample(query);
+        if (fileItems.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<Long> uids = extractUids(fileItems);
         List<User> users = userService.list(uids);
         List<FileItemDTO> result = mapUsers(fileItems, users);

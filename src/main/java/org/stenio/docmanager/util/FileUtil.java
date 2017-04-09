@@ -36,15 +36,26 @@ public class FileUtil {
         while (path.indexOf("//") >= 0) {
             path = path.replaceAll("//", "/");
         }
+        if(path.endsWith("/") && path.length() > 1){
+            path = path.substring(0, path.length() -1 );
+        }
         return path;
     }
 
     public static void copyFile(File source, File target) {
+        if(!target.exists()){
+            target.mkdirs();
+        }
+        if(!target.isDirectory()){
+            target.delete();
+            target.mkdirs();
+        }
+        File targetFile = new File(target.getAbsolutePath() + "/" + source.getName());
         InputStream fis = null;
         OutputStream fos = null;
         try {
             fis = new BufferedInputStream(new FileInputStream(source));
-            fos = new BufferedOutputStream(new FileOutputStream(target));
+            fos = new BufferedOutputStream(new FileOutputStream(targetFile));
             byte[] buf = new byte[4096];
             int i;
             while ((i = fis.read(buf)) != -1) {

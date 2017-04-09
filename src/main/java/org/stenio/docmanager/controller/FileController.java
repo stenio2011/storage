@@ -1,14 +1,14 @@
 package org.stenio.docmanager.controller;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.stenio.docmanager.dto.FileItemDTO;
+import org.stenio.docmanager.dto.MenuDTO;
 import org.stenio.docmanager.model.FileItem;
 import org.stenio.docmanager.service.FileService;
 import org.stenio.docmanager.util.ConfigUtil;
@@ -18,24 +18,29 @@ import org.stenio.docmanager.util.UserContextHolder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by bjhexin3 on 2017/3/21.
  */
-@RestController
+@Controller
 @RequestMapping("/files")
 public class FileController {
 
     @Autowired
     private FileService fileService;
 
-    @RequestMapping(params = "method=createFolder")
+    @RequestMapping("/createFolder")
+    @ResponseBody
     public FileItem createFolder(String path) {
         return fileService.createFolder(path, UserContextHolder.getLoginUserId());
     }
 
-    @RequestMapping(params = "method=upload")
+    @RequestMapping("/upload")
+    @ResponseBody
     public FileItem upload(String path, @RequestParam("file") MultipartFile file) throws IOException {
         String rootPath = ConfigUtil.getString("file_root");
         String absoluteDir = FileUtil.fixPath(rootPath + "/" + path);
@@ -63,13 +68,15 @@ public class FileController {
         return fileService.save(fileItem);
     }
 
-    @RequestMapping(params = "method=list")
+    @RequestMapping("/list")
+    @ResponseBody
     public List<FileItemDTO> list(String path) {
         return fileService.list(path, UserContextHolder.getLoginUserId());
     }
 
-    @RequestMapping(params = "method=download")
-    public void download(String path, HttpServletResponse response) {
+    @RequestMapping("/download")
+    @ResponseBody
+    public void download(String path, HttpServletRequest request, HttpServletResponse response) {
         FileItem file = fileService.getFile(path, UserContextHolder.getLoginUserId());
         if (file == null) {
             return;
@@ -87,7 +94,7 @@ public class FileController {
         OutputStream out = null;
         try {
             in = new FileInputStream(f);
-            response.getOutputStream();
+            out = response.getOutputStream();
             byte[] b = new byte[48];
             int c = 0;
             while ((c = in.read(b)) > 0) {
@@ -97,6 +104,60 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping
+    public String index(Model model, @RequestParam(defaultValue = "/") String path) {
+        List<MenuDTO> menus = showMenu(model);
+        model.addAttribute("menus", menus);
+        if ("/".equals(path)) {
+            path = FileUtil.fixPath(menus.get(0).getSubMenus().get(0).getDir() + "/" + menus.get(0).getSubMenus().get(0).getName());
+        }
+
+        String projectName = path.substring(path.lastIndexOf("/")+1);
+        model.addAttribute("projectName", projectName);
+        model.addAttribute("path", path);
+        List<FileItemDTO> leafDirs = fileService.list(path, UserContextHolder.getLoginUserId());
+        List<Map<String, Object>> leafNodes = new ArrayList<>();
+        if (leafDirs.isEmpty()) {
+            FileItemDTO leafDir = new FileItemDTO();
+            leafDir.setDir(path);
+            leafDir.setId(1L);
+            leafDir.setName("文件列表");
+            leafDirs.add(leafDir);
+        }
+        for (FileItemDTO fileItem : leafDirs) {
+            Map<String, Object> item = new HashMap();
+            item.put("meta", fileItem);
+            String leafPath = FileUtil.fixPath(fileItem.getDir() + "/" + (fileItem.getName().equals("文件列表") ? "" : fileItem.getName()));
+            item.put("path", leafPath);
+            item.put("data", fileService.list(leafPath, UserContextHolder.getLoginUserId()));
+            leafNodes.add(item);
+        }
+        model.addAttribute("leafNodes", leafNodes);
+
+        return "file";
+    }
+
+    private List<MenuDTO> showMenu(Model model) {
+        List<MenuDTO> menus = new ArrayList<>();
+        List<FileItemDTO> rootMenus = fileService.list("/", UserContextHolder.getLoginUserId());
+        for (FileItemDTO rootMenu : rootMenus) {
+            MenuDTO menu = new MenuDTO();
+            menu.setId(rootMenu.getId());
+            menu.setName(rootMenu.getName());
+            menu.setDir(rootMenu.getDir());
+            List<FileItemDTO> subMenus = fileService.list("/" + rootMenu.getName(), UserContextHolder.getLoginUserId());
+            for (FileItemDTO subMenu : subMenus) {
+                MenuDTO subMenuDTO = new MenuDTO();
+                subMenuDTO.setId(subMenu.getId());
+                subMenuDTO.setName(subMenu.getName());
+                subMenuDTO.setDir(subMenu.getDir());
+                menu.getSubMenus().add(subMenuDTO);
+            }
+            menus.add(menu);
+        }
+        return menus;
     }
 
 }
