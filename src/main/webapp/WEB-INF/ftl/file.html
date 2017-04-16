@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Data Tables</title>
+  <title>文件管理系统</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -41,6 +41,7 @@
   <!--[if lt IE 9]>
   <script src="/static/plugins/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="/static/plugins/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <!-- page script -->
     <script>
         function showFiles(id) {
@@ -74,14 +75,13 @@
              });*/
         }
     </script>
-  <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="/static/index2.html" class="logo">
+    <a href="/" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
@@ -102,7 +102,7 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs">${user.realName}</span>
             </a>
           </li>
           <!-- Control Sidebar Toggle Button -->
@@ -157,12 +157,18 @@
             <li><a href="../examples/pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>
           </ul>
         </li>-->
-<#list menus as menu>
-    <li class="header">${menu.name}</li>
-    <#list menu.subMenus as subMenu>
-    <li><a href="/files?path=${subMenu.dir}/${subMenu.name}"><i class="fa fa-folder"></i> <span>${subMenu.name}</span></a></li>
-    </#list>
-</#list>
+          <#if user.isManager == 1>
+              <li class="header">系统管理</li>
+              <li><a href="/"><i class="fa fa-circle-o text-yellow"></i> <span>用户管理</span></a></li>
+              <li><a href="/"><i class="fa fa-circle-o text-aqua"></i> <span>工程设置</span></a></li>
+          </#if>
+          <#list menus as menu>
+              <li class="header">${menu.name}</li>
+              <#list menu.subMenus as subMenu>
+                  <li><a href="/files?path=${subMenu.dir}/${subMenu.name}"><i class="fa fa-folder"></i> <span>${subMenu.name}</span></a>
+                  </li>
+              </#list>
+          </#list>
         <!--<li class="header">LABELS</li>
         <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
         <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
@@ -290,7 +296,7 @@
                         <div class="form-group">
                             <label for="exampleInputFile">选择文件</label>
                             <input type="file" name="file" id="exampleInputFile">
-                            <!--<p class="help-block">请选择要上传的文件</p>-->
+                            <p class="help-block">请选择要上传的文件</p>
                         </div>
                         <input type="hidden" name="path" value="${node.path}" />
                     </div>

@@ -23,4 +23,15 @@ public class UserServiceImpl implements UserService {
         query.createCriteria().andIdIn(ids);
         return userMapper.selectByExample(query);
     }
+
+    @Override
+    public User getByUsername(String userName) {
+        UserCriteria query = new UserCriteria();
+        query.createCriteria().andUsernameEqualTo(userName);
+        List<User> users = userMapper.selectByExample(query);
+        if (!users.isEmpty()) {
+            return users.get(0);
+        }
+        return null;
+    }
 }

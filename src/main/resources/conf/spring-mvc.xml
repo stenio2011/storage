@@ -42,5 +42,18 @@
         <!-- one of the properties available; the maximum file size in bytes -->
         <property name="maxUploadSize" value="10737418240" />
     </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="org.stenio.docmanager.interceptor.LoginInterceptor">
+                <property name="whiteNames">
+                    <list>
+                        <value>/login</value>
+                        <value>/login/doLogin</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <mvc:resources mapping="/static/**" location="/"></mvc:resources>
 </beans>

@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserService {
 
     List<User> list(List<Long> ids);
+
+    User getByUsername(String userName);
 }

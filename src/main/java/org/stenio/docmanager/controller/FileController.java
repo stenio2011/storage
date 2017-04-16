@@ -86,7 +86,10 @@ public class FileController {
         String rootDir = ConfigUtil.getString("file_root");
         String absolutePath = FileUtil.fixPath(rootDir + "/" + file.getDir() + "/" + file.getName());
         File f = new File(absolutePath);
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + f.getName() + "\"");
+        try {
+            response.addHeader("Content-Disposition", "attachment;filename=\"" +  java.net.URLEncoder.encode(file.getName(), "UTF-8")+ "\"");
+        } catch (UnsupportedEncodingException e) {
+        }
         if (!f.exists()) {
             return;
         }

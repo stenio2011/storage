@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by bjhexin3 on 2017/3/20.
  */
-@Controller
+//@Controller
 public class DemoController {
 
     public DemoController(){
