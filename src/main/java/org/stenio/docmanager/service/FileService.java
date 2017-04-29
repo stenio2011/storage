@@ -19,5 +19,7 @@ public interface FileService {
 
     List<FileItemDTO> list(String path, long uid);
 
+    List<FileItemDTO> listDir(String path, long uid);
+
     FileItem getFile(String path, long uid);
 }
