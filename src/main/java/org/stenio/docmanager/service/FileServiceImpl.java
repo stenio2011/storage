@@ -75,6 +75,18 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public List<FileItemDTO> listDir(String path, long uid) {
+        List<FileItemDTO> list = list(path, uid);
+        List<FileItemDTO> result = new ArrayList<>();
+        for (FileItemDTO dto : list) {
+            if (dto.getIsDir().intValue() == 1) {
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public FileItem getFile(String path, long uid) {
         FileItemCriteria query = new FileItemCriteria();
         String[] strs = FileUtil.splitDirAndName(path);

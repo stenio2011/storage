@@ -13,6 +13,7 @@ import org.stenio.docmanager.model.FileItem;
 import org.stenio.docmanager.service.FileService;
 import org.stenio.docmanager.util.ConfigUtil;
 import org.stenio.docmanager.util.FileUtil;
+import org.stenio.docmanager.util.StringUtil;
 import org.stenio.docmanager.util.UserContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +41,7 @@ public class FileController {
     }
 
     @RequestMapping("/upload")
-    @ResponseBody
-    public FileItem upload(String path, @RequestParam("file") MultipartFile file) throws IOException {
+    public String upload(String path, String redirectPath, FileItem fileItem, @RequestParam("file") MultipartFile file) throws IOException {
         String rootPath = ConfigUtil.getString("file_root");
         String absoluteDir = FileUtil.fixPath(rootPath + "/" + path);
         String bakRootPath = ConfigUtil.getString("bak_file_root");
@@ -59,13 +59,13 @@ public class FileController {
 
         FileUtil.copyFile(toFile, new File(bakAbsoluteDir));
 
-        FileItem fileItem = new FileItem();
         fileItem.setSize(file.getSize());
         fileItem.setDir(path);
         fileItem.setName(fileName);
         fileItem.setMd5("");
         fileItem.setUid(UserContextHolder.getLoginUserId());
-        return fileService.save(fileItem);
+        fileService.save(fileItem);
+        return "redirect:" + redirectPath;
     }
 
     @RequestMapping("/list")
@@ -110,7 +110,12 @@ public class FileController {
     }
 
     @RequestMapping
-    public String index(Model model, @RequestParam(defaultValue = "/") String path) {
+    public String index(Model model, HttpServletRequest request, @RequestParam(defaultValue = "/") String path) {
+        String requestURL = request.getRequestURL().toString();
+        if (StringUtil.isNotEmpty(request.getQueryString())) {
+            requestURL += "?" + request.getQueryString();
+        }
+        model.addAttribute("requestURL", requestURL);
         List<MenuDTO> menus = showMenu(model);
         model.addAttribute("menus", menus);
         if ("/".equals(path)) {
@@ -120,7 +125,7 @@ public class FileController {
         String projectName = path.substring(path.lastIndexOf("/")+1);
         model.addAttribute("projectName", projectName);
         model.addAttribute("path", path);
-        List<FileItemDTO> leafDirs = fileService.list(path, UserContextHolder.getLoginUserId());
+        List<FileItemDTO> leafDirs = fileService.listDir(path, UserContextHolder.getLoginUserId());
         List<Map<String, Object>> leafNodes = new ArrayList<>();
         if (leafDirs.isEmpty()) {
             FileItemDTO leafDir = new FileItemDTO();
