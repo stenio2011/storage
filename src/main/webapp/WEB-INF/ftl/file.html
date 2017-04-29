@@ -263,23 +263,23 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>文件编号</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" name="fileCode" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>工程代码</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" name="projectCode" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>项目编号</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" name="itemCode" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>所在工程</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" name="projectName" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>研究阶段</label>
-                            <input type="text" class="form-control" placeholder="">
+                            <input type="text" name="researchStage" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
                             <label>Date:</label>
@@ -288,7 +288,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right" id="datepicker">
+                                <input type="text" name="buildDate" class="form-control pull-right" id="datepicker">
 
                             </div>
                             <!-- /.input group -->
@@ -334,7 +334,8 @@
 <script>
     $(document).ready(function(){
         $('#datepicker').datepicker({
-            language: 'zh-CN'
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd'
         });
     });
 </script>

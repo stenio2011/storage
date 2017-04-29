@@ -41,7 +41,7 @@ public class FileController {
     }
 
     @RequestMapping("/upload")
-    public String upload(String path, String redirectPath, @RequestParam("file") MultipartFile file) throws IOException {
+    public String upload(String path, String redirectPath, FileItem fileItem, @RequestParam("file") MultipartFile file) throws IOException {
         String rootPath = ConfigUtil.getString("file_root");
         String absoluteDir = FileUtil.fixPath(rootPath + "/" + path);
         String bakRootPath = ConfigUtil.getString("bak_file_root");
@@ -59,7 +59,6 @@ public class FileController {
 
         FileUtil.copyFile(toFile, new File(bakAbsoluteDir));
 
-        FileItem fileItem = new FileItem();
         fileItem.setSize(file.getSize());
         fileItem.setDir(path);
         fileItem.setName(fileName);
