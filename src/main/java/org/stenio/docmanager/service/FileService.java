@@ -22,4 +22,6 @@ public interface FileService {
     List<FileItemDTO> listDir(String path, long uid);
 
     FileItem getFile(String path, long uid);
+
+    int delete(String path);
 }

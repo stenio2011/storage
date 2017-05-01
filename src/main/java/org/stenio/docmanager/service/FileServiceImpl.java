@@ -102,6 +102,14 @@ public class FileServiceImpl implements FileService {
         return null;
     }
 
+    @Override
+    public int delete(String path) {
+        String[] strs = FileUtil.splitDirAndName(path);
+        FileItemCriteria query = new FileItemCriteria();
+        query.createCriteria().andDirEqualTo(strs[0]).andNameEqualTo(strs[1]);
+        return fileItemMapper.deleteByExample(query);
+    }
+
     private List<FileItemDTO> mapUsers(List<FileItem> fileItems, List<User> users) {
         List<FileItemDTO> result = new ArrayList<>(fileItems.size());
         Map<Long, User> userMap = new HashMap<>();

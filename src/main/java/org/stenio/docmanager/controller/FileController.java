@@ -68,6 +68,12 @@ public class FileController {
         return "redirect:" + redirectPath;
     }
 
+    @RequestMapping("/delete")
+    public String delete(String redirectPath, String path) {
+        int i = fileService.delete(path);
+        return "redirect:" + redirectPath;
+    }
+
     @RequestMapping("/list")
     @ResponseBody
     public List<FileItemDTO> list(String path) {

@@ -215,6 +215,7 @@
                     <th>建设时间</th>
                     <th>上传人</th>
                     <th>下载</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -229,6 +230,7 @@
                     <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                     <td>${item.userName!''}</td>
                     <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
+                    <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
                 </tr>
                 </#list>
                 </tbody>

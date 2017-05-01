@@ -2,3 +2,4 @@
 /.idea/
 docmanager.iml
 cloud-storage.iml
+src/main/resources/rebel.xml
