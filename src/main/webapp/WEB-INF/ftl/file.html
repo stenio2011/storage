@@ -205,6 +205,7 @@
             <div class="box-body">
               <table id="table_${node.meta.id}" class="table table-bordered table-hover">
                 <thead>
+                <#if (leafNodes?size>1)>
                 <tr>
                     <th>文件编号</th>
                     <th>工程代码</th>
@@ -213,13 +214,25 @@
                     <th>所在工程</th>
                     <th>研究阶段</th>
                     <th>建设时间</th>
-                    <th>上传人</th>
+                    <th>上传人姓名</th>
                     <th>下载</th>
                     <th>操作</th>
                 </tr>
+                    <#else>
+                        <tr>
+                            <th>文件编号</th>
+                            <th>文件名</th>
+                            <th>文件编写人</th>
+                            <th>文件时间</th>
+                            <th>上传人</th>
+                            <th>下载</th>
+                            <th>操作</th>
+                        </tr>
+                </#if>
                 </thead>
                 <tbody>
                 <#list node.data as item>
+                    <#if (leafNodes?size>1)>
                 <tr>
                     <td>${item.fileCode!''}</td>
                     <td>${item.projectCode!''}</td>
@@ -232,6 +245,15 @@
                     <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
                     <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
                 </tr>
+                        <#else>
+                            <td>${item.fileCode!''}</td>
+                            <td>${item.name!''}</td>
+                            <th>${item.projectName!''}</th>
+                            <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
+                            <td>${item.userName!''}</td>
+                            <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
+                            <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
+                            </#if>
                 </#list>
                 </tbody>
                 <tfoot>
@@ -263,6 +285,7 @@
                         <h4 class="modal-title" id="myModalLabel">上传文件</h4>
                     </div>
                     <div class="modal-body">
+                        <#if (leafNodes?size>1)>
                         <div class="form-group">
                             <label>文件编号</label>
                             <input type="text" name="fileCode" class="form-control" placeholder="">
@@ -284,17 +307,43 @@
                             <input type="text" name="researchStage" class="form-control" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label>Date:</label>
+                            <label>建设时间:</label>
 
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" name="buildDate" class="form-control pull-right" id="datepicker">
-
+                                <input type="text" name="buildDate" class="form-control pull-right">
                             </div>
                             <!-- /.input group -->
                         </div>
+                            <#else>
+                                <div class="form-group">
+                                    <label>文件编号</label>
+                                    <input type="text" name="fileCode" class="form-control" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label>文件名
+                                    </label>
+                                    <input type="text" name="projectCode" class="form-control" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label>文件编写人</label>
+                                    <input type="text" name="projectName" class="form-control" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label>文件时间:</label>
+
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="buildDate" class="form-control pull-right">
+                                    </div>
+                                    <!-- /.input group -->
+
+                                </div>
+                        </#if>
                         <div class="form-group">
                             <label for="exampleInputFile">选择文件</label>
                             <input type="file" name="file" id="exampleInputFile">
@@ -335,7 +384,7 @@
 <script src="/static/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js" charset="UTF-8"></script>
 <script>
     $(document).ready(function(){
-        $('#datepicker').datepicker({
+        $('[name="buildDate"]').datepicker({
             language: 'zh-CN',
             format: 'yyyy-mm-dd'
         });
