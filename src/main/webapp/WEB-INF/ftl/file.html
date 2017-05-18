@@ -223,6 +223,7 @@
                             <th>文件编号</th>
                             <th>文件名</th>
                             <th>文件编写人</th>
+                            <th>文件类型</th>
                             <th>文件时间</th>
                             <th>上传人</th>
                             <th>下载</th>
@@ -243,12 +244,15 @@
                     <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                     <td>${item.userName!''}</td>
                     <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
+                    <#if user.isManager == 1>
                     <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
+                    </#if>
                 </tr>
                         <#else>
                             <td>${item.fileCode!''}</td>
                             <td>${item.name!''}</td>
-                            <th>${item.projectName!''}</th>
+                            <td>${item.editor!''}</td>
+                            <td>${item.fileType!''}</td>
                             <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                             <td>${item.userName!''}</td>
                             <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
@@ -328,8 +332,12 @@
                                     <input type="text" name="projectCode" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group">
+                                    <label>文件类型</label>
+                                    <input type="text" name="fileType" class="form-control" placeholder="">
+                                </div>
+                                <div class="form-group">
                                     <label>文件编写人</label>
-                                    <input type="text" name="projectName" class="form-control" placeholder="">
+                                    <input type="text" name="editor" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label>文件时间:</label>
