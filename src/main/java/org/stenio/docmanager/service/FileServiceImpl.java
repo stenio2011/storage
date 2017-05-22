@@ -12,7 +12,9 @@ import org.stenio.docmanager.model.User;
 import org.stenio.docmanager.util.FileUtil;
 import org.stenio.docmanager.util.StringUtil;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.util.*;
 
 
@@ -71,6 +73,15 @@ public class FileServiceImpl implements FileService {
         List<Long> uids = extractUids(fileItems);
         List<User> users = userService.list(uids);
         List<FileItemDTO> result = mapUsers(fileItems, users);
+        for (FileItemDTO dto : result) {
+            String filePath = dto.getDir() + "/" + dto.getName();
+            try {
+                filePath = URLEncoder.encode(filePath, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            dto.setPath(filePath);
+        }
         return result;
     }
 

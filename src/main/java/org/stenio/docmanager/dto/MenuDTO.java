@@ -14,6 +14,8 @@ public class MenuDTO {
 
     private String dir;
 
+    private String path;
+
     private List<MenuDTO> subMenus = new ArrayList<>();
 
     public Long getId() {
@@ -46,5 +48,13 @@ public class MenuDTO {
 
     public void setSubMenus(List<MenuDTO> subMenus) {
         this.subMenus = subMenus;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

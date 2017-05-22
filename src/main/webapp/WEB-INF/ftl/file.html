@@ -165,7 +165,7 @@
           <#list menus as menu>
               <li class="header">${menu.name}</li>
               <#list menu.subMenus as subMenu>
-                  <li><a href="/files?path=${subMenu.dir}/${subMenu.name}"><i class="fa fa-folder"></i> <span>${subMenu.name}</span></a>
+                  <li><a href="/files?path=${subMenu.path}"><i class="fa fa-folder"></i> <span>${subMenu.name}</span></a>
                   </li>
               </#list>
           </#list>
@@ -243,20 +243,22 @@
                     <td>${item.researchStage!''}</td>
                     <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                     <td>${item.userName!''}</td>
-                    <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
+                    <td><a href="/files/download?path=${item.path}">下载</a></td>
                     <#if user.isManager == 1>
-                    <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
+                    <td><a href="/files/delete?path=${item.path}&redirectPath=${requestURL}">删除</a></td>
                     </#if>
                 </tr>
                         <#else>
+                            <tr>
                             <td>${item.fileCode!''}</td>
                             <td>${item.name!''}</td>
                             <td>${item.editor!''}</td>
                             <td>${item.fileType!''}</td>
                             <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                             <td>${item.userName!''}</td>
-                            <td><a href="/files/download?path=${item.dir}/${item.name}">下载</a></td>
-                            <td><a href="/files/delete?path=${item.dir}/${item.name}&redirectPath=${requestURL}">删除</a></td>
+                            <td><a href="/files/download?path=${item.path}">下载</a></td>
+                            <td><a href="/files/delete?path=${item.path}&redirectPath=${requestURL}">删除</a></td>
+                            </tr>
                             </#if>
                 </#list>
                 </tbody>

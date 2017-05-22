@@ -19,6 +19,7 @@ import org.stenio.docmanager.util.UserContextHolder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,7 @@ public class FileController {
         String absolutePath = FileUtil.fixPath(rootDir + "/" + file.getDir() + "/" + file.getName());
         File f = new File(absolutePath);
         try {
-            response.addHeader("Content-Disposition", "attachment;filename=\"" +  java.net.URLEncoder.encode(file.getName(), "UTF-8")+ "\"");
+            response.addHeader("Content-Disposition", "attachment;filename=\"" + java.net.URLEncoder.encode(file.getName(), "UTF-8") + "\"");
         } catch (UnsupportedEncodingException e) {
         }
         if (!f.exists()) {
@@ -119,7 +120,11 @@ public class FileController {
     public String index(Model model, HttpServletRequest request, @RequestParam(defaultValue = "/") String path) {
         String requestURL = request.getRequestURL().toString();
         if (StringUtil.isNotEmpty(request.getQueryString())) {
-            requestURL += "?" + request.getQueryString();
+            try {
+                requestURL += "?" + URLEncoder.encode(request.getQueryString(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         model.addAttribute("requestURL", requestURL);
         List<MenuDTO> menus = showMenu(model);
@@ -128,7 +133,7 @@ public class FileController {
             path = FileUtil.fixPath(menus.get(0).getSubMenus().get(0).getDir() + "/" + menus.get(0).getSubMenus().get(0).getName());
         }
 
-        String projectName = path.substring(path.lastIndexOf("/")+1);
+        String projectName = path.substring(path.lastIndexOf("/") + 1);
         model.addAttribute("projectName", projectName);
         model.addAttribute("path", path);
         List<FileItemDTO> leafDirs = fileService.listDir(path, UserContextHolder.getLoginUserId());
@@ -167,6 +172,13 @@ public class FileController {
                 subMenuDTO.setId(subMenu.getId());
                 subMenuDTO.setName(subMenu.getName());
                 subMenuDTO.setDir(subMenu.getDir());
+                String path = subMenu.getDir() + "/" + subMenu.getName();
+                try {
+                    path = URLEncoder.encode(path, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                subMenuDTO.setPath(path);
                 menu.getSubMenus().add(subMenuDTO);
             }
             menus.add(menu);

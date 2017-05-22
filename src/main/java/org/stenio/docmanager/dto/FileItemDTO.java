@@ -9,11 +9,21 @@ public class FileItemDTO extends FileItem{
 
     private String userName;
 
+    private String path;
+
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
