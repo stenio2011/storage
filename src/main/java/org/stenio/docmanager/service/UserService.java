@@ -12,4 +12,6 @@ public interface UserService {
     List<User> list(List<Long> ids);
 
     User getByUsername(String userName);
+
+    void addUser(String username, String password, String realName);
 }

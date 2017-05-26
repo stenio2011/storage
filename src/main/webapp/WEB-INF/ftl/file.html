@@ -158,9 +158,9 @@
           </ul>
         </li>-->
           <#if user.isManager == 1>
-              <li class="header">系统管理</li>
+              <!--<li class="header">系统管理</li>
               <li><a href="/"><i class="fa fa-circle-o text-yellow"></i> <span>用户管理</span></a></li>
-              <li><a href="/"><i class="fa fa-circle-o text-aqua"></i> <span>工程设置</span></a></li>
+              <li><a href="/"><i class="fa fa-circle-o text-aqua"></i> <span>工程设置</span></a></li>-->
           </#if>
           <#list menus as menu>
               <li class="header">${menu.name}</li>
@@ -244,8 +244,10 @@
                     <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                     <td>${item.userName!''}</td>
                     <td><a href="/files/download?path=${item.path}">下载</a></td>
-                    <#if user.isManager == 1>
+                    <#if user.isManager == 1 || item.uid == user.id>
                     <td><a href="/files/delete?path=${item.path}&redirectPath=${requestURL}">删除</a></td>
+                        <#else>
+                            <td></td>
                     </#if>
                 </tr>
                         <#else>
@@ -257,8 +259,13 @@
                             <td><#if item.buildDate??>${item.buildDate?date}<#else>--</#if></td>
                             <td>${item.userName!''}</td>
                             <td><a href="/files/download?path=${item.path}">下载</a></td>
+                                <#if user.isManager == 1 || item.uid == user.id>
                             <td><a href="/files/delete?path=${item.path}&redirectPath=${requestURL}">删除</a></td>
+                                    <#else>
+                                        <td></td>
+                                </#if>
                             </tr>
+
                             </#if>
                 </#list>
                 </tbody>

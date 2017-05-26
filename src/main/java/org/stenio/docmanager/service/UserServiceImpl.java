@@ -34,4 +34,14 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public void addUser(String username, String password, String realName) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setRealName(realName);
+        user.setIsManager((byte) 0);
+        userMapper.insert(user);
+    }
 }

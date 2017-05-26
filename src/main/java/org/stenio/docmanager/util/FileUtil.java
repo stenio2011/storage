@@ -82,4 +82,22 @@ public class FileUtil {
         }
     }
 
+    public static String getExt(String fileName) {
+        if (StringUtil.isEmpty(fileName)) {
+            return "";
+        }
+        int i = fileName.lastIndexOf(".");
+        if (i >= 0) {
+            return fileName.substring(i + 1);
+        }
+        return "";
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(getExt(".abc"));
+        System.out.println(getExt("xx.abc"));
+        System.out.println(getExt("xx.x.abc"));
+        System.out.println(getExt("xx"));
+    }
 }

@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<FileItemDTO> list(String path, long uid) {
         FileItemCriteria query = new FileItemCriteria();
-        query.createCriteria().andUidEqualTo(uid).andDirEqualTo(path);
+        query.createCriteria().andDirEqualTo(path);
         List<FileItem> fileItems = fileItemMapper.selectByExample(query);
         if (fileItems.isEmpty()) {
             return new ArrayList<>();
