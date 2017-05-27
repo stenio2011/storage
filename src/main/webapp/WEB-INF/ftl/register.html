@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>澜沧江分院文件管理系统</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/plugins/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="/static/plugins/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="/static/plugins/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="/static/plugins/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="/">澜沧江分院文件管理系统</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <#if !success?exists>
+    <p class="login-box-msg">注册</p>
+
+    <form action="/users/doRegister" method="post">
+      <div class="form-group has-feedback">
+        <label>用户名</label>
+        <input type="text" name="username" class="form-control" placeholder="用户名">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>密码</label>
+        <input type="password" name="password" class="form-control" placeholder="密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>确认密码</label>
+        <input type="password" name="rePassword" class="form-control" placeholder="确认密码">
+        <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>姓名</label>
+        <input type="text" name="realName" class="form-control" placeholder="姓名">
+        <span class="glyphicon glyphicon-credit-card form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <!--<div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> Remember Me
+            </label>
+          </div>
+        </div>-->
+        <div class="col-xs-8">
+          <#if error?exists>
+          <span style="color:red">${error!''}</span>
+          </#if>
+        </div>
+
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">提交</button>
+        </div>
+
+        <!-- /.col -->
+      </div>
+    </form>
+    <!-- /.social-auth-links -->
+    <!--<a href="#">I forgot my password</a><br>-->
+    <#else>
+      <p class="login-box-msg">注册成功，点击 <a href="/login" class="text-center">登录</a></p>
+      </#if>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
+</body>
+</html>
