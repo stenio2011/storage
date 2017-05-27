@@ -93,11 +93,4 @@ public class FileUtil {
         return "";
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(getExt(".abc"));
-        System.out.println(getExt("xx.abc"));
-        System.out.println(getExt("xx.x.abc"));
-        System.out.println(getExt("xx"));
-    }
 }
